@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/sgdr/wallet-service/internal/account"
+	"github.com/sgdr/wallet-service/internal/datasource"
 	"github.com/sgdr/wallet-service/internal/db"
 	"html/template"
 	"net/http"
@@ -34,9 +35,13 @@ func main() {
 		return
 	}
 
-	dataSource, err := db.New(ctx, cfg.Db)
+	dataSource, err := datasource.New(ctx, cfg.Db)
 	if err != nil {
 		level.Error(log).Log("msg", "creation of data source fails "+err.Error())
+		return
+	}
+	if err := db.CreateDbStructure(ctx, dataSource); err != nil {
+		level.Error(log).Log("msg", "db structure's creation fails "+err.Error())
 		return
 	}
 	accountRep := account.NewRepository(dataSource)

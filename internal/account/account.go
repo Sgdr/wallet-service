@@ -1,6 +1,8 @@
 package account
 
-import "github.com/sgdr/wallet-service/internal/currency"
+import (
+	"github.com/sgdr/wallet-service/internal/currency"
+)
 
 type Account struct {
 	ID       uint
