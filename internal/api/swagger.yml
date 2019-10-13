@@ -1,0 +1,23 @@
+swagger: "2.0"
+info:
+  description: "Wallet service API"
+  version: "0.0.1"
+  title: "Wallet service"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /api/v1/accounts/all:
+    get:
+      summary: Get All accounts
+      description: Get all available accounts
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Documentation page
+      tags:
+      - accounts
