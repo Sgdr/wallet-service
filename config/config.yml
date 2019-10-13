@@ -1,0 +1,8 @@
+db:
+  name: wallet
+  host: localhost
+  port: 5432
+  user: wallet_user
+  password: wallet_user_pass
+  max_connections: 100
+http_port: 8002

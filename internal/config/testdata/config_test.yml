@@ -1,0 +1,8 @@
+db:
+  name: wallet_test
+  host: localhost
+  port: 5432
+  user: test_user
+  password: test_user_pass
+  max_connections: 10
+http_port: 1234

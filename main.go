@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Sgdr/wallet-service/internal/logger"
 	"github.com/go-kit/kit/log/level"
+	"github.com/sgdr/wallet-service/internal/logger"
 )
 
 func main() {

@@ -1,7 +1,7 @@
-module github.com/Sgdr/wallet-service
+module github.com/sgdr/wallet-service
 
 require (
 	github.com/go-kit/kit v0.9.0
-	github.com/go-logfmt/logfmt v0.4.0 // indirect
-	github.com/go-stack/stack v1.8.0 // indirect
+	github.com/spf13/viper v1.4.0
+	github.com/stretchr/testify v1.2.2
 )
