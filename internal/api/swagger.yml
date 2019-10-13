@@ -19,5 +19,29 @@ paths:
       responses:
         200:
           description: Documentation page
+          schema:
+            $ref: "#/definitions/AccountsListResponse"
       tags:
       - accounts
+definitions:
+  AccountsListResponse:
+    type: array
+    items:
+      $ref: "#/definitions/Account"
+  Account:
+    type: object
+    required:
+    - id
+    - balance
+    - currency
+    properties:
+      id:
+        type: "string"
+        description: account's string identifier
+      balance:
+        description: "balance of account in smallest units of currency.
+        For example, for USD it will be cents amount"
+        type: integer
+      currency:
+        description: ticker of currency. For example, for USD
+        type: "string"

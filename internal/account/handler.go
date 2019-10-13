@@ -20,7 +20,11 @@ func AllAccountsHandler(s Service) func(http.ResponseWriter,
 			jsonResponse(writer, map[string]string{"message": "something went wrong"}, http.StatusBadRequest)
 			return
 		}
-		jsonResponse(writer, accounts, http.StatusOK)
+		resultList := make([]ResponseItem, len(accounts))
+		for i, a := range accounts {
+			resultList[i] = a.ToResponseItem()
+		}
+		jsonResponse(writer, resultList, http.StatusOK)
 	}
 }
 

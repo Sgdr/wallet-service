@@ -10,3 +10,13 @@ type Account struct {
 	Owner    string
 	Balance  uint64
 }
+
+type ResponseItem struct {
+	ID       string `json:"id"`
+	Balance  uint64 `json:"balance"`
+	Currency string `json:"currency"`
+}
+
+func (a *Account) ToResponseItem() ResponseItem {
+	return ResponseItem{ID: a.Owner, Balance: a.Balance, Currency: a.Currency.Ticker}
+}
