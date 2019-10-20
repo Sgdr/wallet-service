@@ -40,7 +40,7 @@ func main() {
 		level.Error(log).Log("msg", "creation of data source fails "+err.Error())
 		return
 	}
-	if err := db.CreateDbStructure(ctx, dataSource); err != nil {
+	if err := db.CreateDbStructure(ctx, dataSource, "./internal/db/update_db_structure.sql"); err != nil {
 		level.Error(log).Log("msg", "db structure's creation fails "+err.Error())
 		return
 	}

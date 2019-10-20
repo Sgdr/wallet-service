@@ -8,12 +8,12 @@ type Account struct {
 	ID       uint
 	Currency currency.Currency
 	Owner    string
-	Balance  uint64
+	Balance  int64
 }
 
 type ResponseItem struct {
 	ID       string `json:"id"`
-	Balance  uint64 `json:"balance"`
+	Balance  int64  `json:"balance"`
 	Currency string `json:"currency"`
 }
 

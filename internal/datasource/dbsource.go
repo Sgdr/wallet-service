@@ -16,6 +16,7 @@ import (
 const (
 	connectionRetriesCount             = 5
 	delayBetweenConnectionsAttemptsSec = 2
+	TxFieldName                        = "transaction"
 )
 
 var (
