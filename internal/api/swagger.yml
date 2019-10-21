@@ -23,6 +23,46 @@ paths:
             $ref: "#/definitions/AccountsListResponse"
       tags:
       - accounts
+  /api/v1/payments/all:
+    get:
+      summary: Get All payments
+      description: Get all incoming and outgoing payments for account
+      parameters:
+      - name: "accountFor"
+        in: "query"
+        description: "accountFor - account which payments will be collected for"
+        required: true
+        type: "string"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: list of payments for account
+          schema:
+            $ref: "#/definitions/PaymentsListResponse"
+        400:
+          description: wrong account paramenter or internal error
+      tags:
+      - payments
+  /api/v1/payment:
+    post:
+      summary: Create payment
+      description: create payment from one account to another, amount is set in cents (smallest units for currency)
+      parameters:
+      - in: body
+        name:
+        description: parameters for payment
+        schema:
+          $ref: '#/definitions/CreatePaymentRequest'
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: payment was created successfully
+        400:
+          description: wrong paramenters or internal error
+      tags:
+      - payments
 definitions:
   AccountsListResponse:
     type: array
@@ -32,16 +72,56 @@ definitions:
     type: object
     required:
     - id
-    - balance
     - currency
     properties:
       id:
         type: "string"
         description: account's string identifier
-      balance:
-        description: "balance of account in smallest units of currency.
-        For example, for USD it will be cents amount"
+      currency:
+        description: ticker of currency. For example, for USD
+        type: "string"
+  PaymentsListResponse:
+    type: array
+    items:
+      $ref: "#/definitions/Payment"
+  Payment:
+    type: object
+    required:
+    - account
+    - amount
+    - currency
+    - direction
+    properties:
+      account:
+        type: "string"
+        description: account from payment was created or account to payment was created
+      amount:
         type: integer
+        description: amount of payment in smallest units. For example, for USD it will be cents
+      currency:
+        description: ticker of currency. For example, for USD
+        type: "string"
+      direction:
+        description: outgoing or incoming. value is 'outgoing' if payment was created from account
+          otherwise - value will be 'incoming'
+        type: "string"
+  CreatePaymentRequest:
+    type: object
+    required:
+    - accountFrom
+    - accountTo
+    - amount
+    - currency
+    properties:
+      accountFrom:
+        type: "string"
+        description: account which money will be transfered from
+      accountTo:
+        type: "string"
+        description: account which money will be transfered to
+      amount:
+        type: integer
+        description: amount of payment in smallest units. For example, for USD it will be cents
       currency:
         description: ticker of currency. For example, for USD
         type: "string"

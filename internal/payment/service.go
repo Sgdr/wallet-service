@@ -12,7 +12,7 @@ import (
 )
 
 type Service interface {
-	GetAll(ctx context.Context) ([]Payment, error)
+	GetAllForClient(ctx context.Context, client string) ([]Payment, error)
 	CreatePayment(ctx context.Context, sender string, recipient string, amount int64, currency string) error
 }
 
@@ -25,10 +25,10 @@ func NewService(paymentRep Repository, accountRep account.Repository) Service {
 	return &paymentService{paymentRep: paymentRep, accountRep: accountRep}
 }
 
-func (p paymentService) GetAll(ctx context.Context) ([]Payment, error) {
+func (p paymentService) GetAllForClient(ctx context.Context, client string) ([]Payment, error) {
 	log := logger.FromContext(ctx)
-	level.Info(log).Log("msg", "get all payments")
-	return p.paymentRep.FindAll(ctx)
+	level.Info(log).Log("msg", "get all payments for client"+client)
+	return p.paymentRep.FindAll(ctx, client)
 }
 
 func (p paymentService) CreatePayment(ctx context.Context, sender string, recipient string, amount int64, currency string) error {

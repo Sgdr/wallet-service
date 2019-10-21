@@ -83,8 +83,7 @@ func TestPaymentService_CreatePayment(t *testing.T) {
 		assert.Nil(t, err2)
 		assert.True(t, strings.Contains(err1.Error(), "unsufficient funds"))
 	}
-
-	payments, err := ps.GetAll(ctx)
+	payments, err := ps.GetAllForClient(ctx, "Alice")
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(payments))
 	assert.Equal(t, "Alice", payments[0].AccountFrom.Owner)

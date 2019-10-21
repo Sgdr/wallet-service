@@ -13,10 +13,9 @@ type Account struct {
 
 type ResponseItem struct {
 	ID       string `json:"id"`
-	Balance  int64  `json:"balance"`
 	Currency string `json:"currency"`
 }
 
 func (a *Account) ToResponseItem() ResponseItem {
-	return ResponseItem{ID: a.Owner, Balance: a.Balance, Currency: a.Currency.Ticker}
+	return ResponseItem{ID: a.Owner, Currency: a.Currency.Ticker}
 }

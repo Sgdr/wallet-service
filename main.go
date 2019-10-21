@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"github.com/sgdr/wallet-service/internal/account"
 	"github.com/sgdr/wallet-service/internal/datasource"
 	"github.com/sgdr/wallet-service/internal/db"
+	"github.com/sgdr/wallet-service/internal/payment"
 	"html/template"
 	"net/http"
 	"os"
@@ -45,13 +45,17 @@ func main() {
 		return
 	}
 	accountRep := account.NewRepository(dataSource)
+	paymentRep := payment.NewRepository(dataSource)
 	accountService := account.NewService(accountRep)
+	paymentService := payment.NewService(paymentRep, accountRep)
 	router := mux.NewRouter()
 	router.HandleFunc("/doc", getDoc).Methods("GET")
 	router.HandleFunc("/swagger.yml", swagger).Methods("GET")
 	apiSubRouter := router.PathPrefix("/api/v1/").Subrouter()
 	apiSubRouter.Use(addRequestIdToLogMiddleware)
 	apiSubRouter.HandleFunc("/accounts/all", account.AllAccountsHandler(accountService)).Methods("GET")
+	apiSubRouter.HandleFunc("/payments/all", payment.AllPaymentsForClient(paymentService)).Methods("GET")
+	apiSubRouter.HandleFunc("/payment", payment.CreatePayment(paymentService)).Methods("POST")
 	httpServerExternal := http.Server{Addr: ":" + cfg.HttpPort, Handler: router}
 	go func() {
 		if err := httpServerExternal.ListenAndServe(); err != nil {
@@ -85,7 +89,6 @@ func getDoc(w http.ResponseWriter, r *http.Request) {
 }
 
 func swagger(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("here")
 	w.Header().Set("Content-Type", "application/json")
 	http.ServeFile(w, r, "./internal/api/swagger.yml")
 }

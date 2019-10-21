@@ -11,7 +11,7 @@ import (
 
 type Repository interface {
 	Store(ctx context.Context, payment *Payment) error
-	FindAll(ctx context.Context) ([]Payment, error)
+	FindAll(ctx context.Context, owner string) ([]Payment, error)
 }
 
 type paymentRepository struct {
@@ -49,16 +49,17 @@ const findAllPaymentsQuery = "SELECT p.id, a.id, a.owner, a2.id, a2.owner, p.amo
 	"FROM payments p " +
 	"INNER JOIN accounts a ON p.account_from_id = a.id " +
 	"INNER JOIN accounts a2 ON a2.id = p.account_to_id " +
-	"INNER JOIN currencies c ON p.currency_id = c.id"
+	"INNER JOIN currencies c ON p.currency_id = c.id " +
+	"WHERE a.owner = $1 OR a2.owner = $2;"
 
-func (a *paymentRepository) FindAll(ctx context.Context) ([]Payment, error) {
+func (a *paymentRepository) FindAll(ctx context.Context, owner string) ([]Payment, error) {
 	payments := make([]Payment, 0)
 	stmt, err := a.db.Prepare(findAllPaymentsQuery)
 	if err != nil {
 		return payments, err
 	}
 	defer stmt.Close()
-	rows, err := stmt.QueryContext(ctx)
+	rows, err := stmt.QueryContext(ctx, owner, owner)
 	if err != nil {
 		return payments, err
 	}
